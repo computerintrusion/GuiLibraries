@@ -1,11 +1,11 @@
 -- init
-local player = game.Players.LocalPlayer
+local player = cloneref(game:GetService("Players").LocalPlayer)
 local mouse = player:GetMouse()
 
 -- services
-local input = game:GetService("UserInputService")
-local run = game:GetService("RunService")
-local tween = game:GetService("TweenService")
+local input = cloneref(game:GetService("UserInputService"))
+local run = cloneref(game:GetService("RunService"))
+local tween = cloneref(game:GetService("TweenService"))
 local tweeninfo = TweenInfo.new
 
 -- additional
@@ -1808,10 +1808,8 @@ do
 	end
 	
 	-- class functions
-	
 	function library:SelectPage(page, toggle)
-		
-		if toggle and self.focusedPage == page then -- already selected
+		if toggle and self.focusedPage == page then
 			return
 		end
 		
@@ -1844,10 +1842,9 @@ do
 				section.container.Parent.ImageTransparency = 0
 			end
 			
-			if sectionsRequired < 0 then -- "hides" some sections
+			if sectionsRequired < 0 then
 				for i = existingSections, #page.sections + 1, -1 do
 					local section = focusedPage.sections[i].container.Parent
-					
 					utility:Tween(section, {ImageTransparency = 1}, 0.1)
 				end
 			end
@@ -1859,10 +1856,9 @@ do
 				focusedPage.container.Visible = false
 			end
 			
-			if sectionsRequired > 0 then -- "creates" more section
+			if sectionsRequired > 0 then
 				for i = existingSections + 1, #page.sections do
 					local section = page.sections[i].container.Parent
-					
 					section.ImageTransparency = 1
 					utility:Tween(section, {ImageTransparency = 0}, 0.05)
 				end
@@ -1871,10 +1867,8 @@ do
 			wait(0.05)
 			
 			for i, section in pairs(page.sections) do
-			
 				utility:Tween(section.container.Title, {TextTransparency = 0}, 0.1)
 				section:Resize(true)
-				
 				wait(0.05)
 			end
 			
@@ -1901,7 +1895,7 @@ do
 			page:Resize()
 		end
 	end
-	
+			
 	function page:Resize(scroll)
 		local padding = 10
 		local size = 0
@@ -1911,7 +1905,7 @@ do
 		end
 		
 		self.container.CanvasSize = UDim2.new(0, 0, 0, size)
-		self.container.ScrollBarImageTransparency = size > self.container.AbsoluteSize.Y
+		self.container.ScrollBarImageTransparency = (size <= self.container.AbsoluteSize.Y) and 1 or 0
 		
 		if scroll then
 			utility:Tween(self.container, {CanvasPosition = Vector2.new(0, self.lastPosition or 0)}, 0.2)
